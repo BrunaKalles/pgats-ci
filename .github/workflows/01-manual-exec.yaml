@@ -53,8 +53,6 @@ jobs:
               run: |
                 cat results.xml | head -20
 
-            - name: Relatório de resultado dos testes
-              uses: test-summary/action@v2
-              if: always() # Garante que o relatório rode mesmo se os testes falharem
-              with:
-                paths: 'results.xml' # Ajuste para o caminho dos seus arquivos de teste
+            - name: Resumir os resultados dos testes
+              uses: jeantessier/test-summary-action@v1
+              if: ${{ always() }}
