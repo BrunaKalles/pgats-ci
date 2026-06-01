@@ -55,4 +55,6 @@ jobs:
 
             - name: Resumir os resultados dos testes
               uses: jeantessier/test-summary-action@v1
+              with: 
+                paths: results.xml
               if: ${{ always() }}
