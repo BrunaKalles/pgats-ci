@@ -55,6 +55,10 @@ jobs:
 
             - name: Resumir os resultados dos testes
               uses: test-summary/action@v1
-              with: 
-                paths: results.xml
+              if: always()
+
+            - name: Test Summary
+              uses: gha-actions/test-summary@latest
+              with:
+                paths: "test/results/**/TEST-*.xml"
               if: always()
