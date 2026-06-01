@@ -1,7 +1,7 @@
 # CI de Nível 01 - Disparo Manual através de clique
 
 # nome da pipeline
-name: 'Execução Manual e PR Review'
+name: "Execução Manual e PR Review"
 
 
 # gatilhos / triggers - regras de disparo
@@ -12,23 +12,83 @@ on:
 
     pull_request:
         types:
-        - opened
-        - synchronize
-        - reopened
+            - opened
+            - synchronize
+            - reopened
 
 # tarefas dentro da pipeline = jobs
-jobs: 
-    pr-agent:
+jobs:
+  pr-agent:
     if: github.event_name == 'pull_request' && github.event.action == 'opened'
 
     runs-on: ubuntu-latest
 
-    permissions: 
-        contents: read 
-        pull-requests: write 
-        issues: write
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
 
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Gerar descrição do PR
+        uses: Codium-ai/pr-agent@main
+        env:
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          command: describe
+
+      - name: Revisar PR
+        uses: Codium-ai/pr-agent@main
+        env:
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          command: review
+
+      - name: Sugerir melhorias
+        uses: Codium-ai/pr-agent@main
+        env:
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          command: improve
+
+  # nome do job
+  e2e-tests:
+    if: github.event_name == 'workflow_dispatch'
+    # maquina onde o job vai rodar
+    runs-on: ubuntu-latest
+
+    # passos do job
+    steps:
+      # clone do projeto
+      - uses: actions/checkout@v4
+
+      # instalação do node
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+
+      # instalação do yarn
+      - name: Instalando o Yarn
+        run: npm install -g yarn
+
+      # instalação das dependências
+      - name: Instalando as dependências
+        run: yarn install
+
+      # instalação dos browsers do playwright
+      - name: Instalando os browsers do Playwright
+        run: yarn playwright install
+
+      # execução dos testes e2e
+      - name: Executando os testes e2e
+        run: yarn run e2e
+
         - name: Checkout
           uses: actions/checkout@v4
 
@@ -59,7 +119,6 @@ jobs:
 
 
     # nome do job
-=======
 #tarefas dentro da pipeline = jobs
 
 jobs:
@@ -94,3 +153,4 @@ jobs:
             # executar os testes e2e
             - name: Executando testes e2e
               run: yarn run e2e
+
