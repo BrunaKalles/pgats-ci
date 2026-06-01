@@ -9,18 +9,11 @@ name: 'Execução Manual'
 on:
     workflow_dispatch:
 
-    pull_request:
-      types:
-        - opened
-        - synchronize
-        - reopened
-
 # tarefas dentro da pipeline = jobs
 jobs: 
     # nome do job
     e2e-tests:
         # maquina onde o job vai rodar
-        #if: github.event_name == 'workflow_dispatch'
         runs-on: ubuntu-latest
 
         # passos do job
@@ -48,19 +41,3 @@ jobs:
             # execução dos testes e2e
             -   name: Executando os testes e2e
                 run: yarn run e2e
-
-    pr-agent:
-      if: github.event_name == 'pull_request'
-      runs-on: ubuntu-latest
-
-      permissions:
-        pull-requests: write
-        contents: write
-        issues: write
-
-      steps:
-        - name: PR Agent
-          uses: the-pr-agent/pr-agent@main
-          env:
-            OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
