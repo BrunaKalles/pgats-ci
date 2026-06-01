@@ -42,6 +42,17 @@ jobs:
             -   name: Executando os testes e2e
                 run: yarn run e2e
 
+            - name: Verificar XML
+              if: always()
+              run: |
+                echo "Arquivos XML:"
+                find . -name "*.xml"
+
+            - name: Mostrar results.xml
+              if: always()
+              run: |
+                cat results.xml | head -20
+
             - name: Relatório de resultado dos testes
               uses: test-summary/action@v2
               if: always() # Garante que o relatório rode mesmo se os testes falharem
