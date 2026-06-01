@@ -53,7 +53,7 @@ jobs:
               run: |
                 cat results.xml | head -20
 
-            - name: Upload Playwright report
+            - name: Fazer upload do relatório do Playwright
               uses: actions/upload-artifact@v4
               if: always()
               with:
