@@ -5,12 +5,14 @@ name: 'Scheduled execution'
 
 # gatilhos / triggers - regras de disparo
 # gatilho manual= workflow dispatch
+# gatilho por cronograma = schedule
 
 on:
     schedule:
         #crononograma de execução
         # 1º - minuto, 2º - hora,  3º - dia do mês, 4º - mês, 5º - dia da semana
-    - cron: '0 0 * * 0' # toda semana no domingo às 00:00
+      - cron: '35 0 * * 0' # toda semana no domingo às 00:00        
+
 
 # tarefas dentro da pipeline = jobs
 jobs: 
