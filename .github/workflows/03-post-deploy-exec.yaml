@@ -10,7 +10,7 @@ name: 'Execução por deploy'
 
 on:
     workflow_run:
-      workflows: ["Execução Manual"] # nome da pipeline que deve ser concluída para disparar esta pipeline
+      workflows: ['Execução Manual'] # nome da pipeline que deve ser concluída para disparar esta pipeline
       types:
         - completed # tipo de evento que deve ocorrer na pipeline anterior para disparar esta pipeline
 
@@ -21,7 +21,7 @@ jobs:
         # maquina onde o job vai rodar
         runs-on: ubuntu-latest
     
-        if: ${{github.event.workflow_run.conclusion == 'success'}} # condição para rodar o job somente se a pipeline anterior tiver sido concluída com sucesso        # passos do job
+     #   if: ${{github.event.workflow_run.conclusion == 'success'}} # condição para rodar o job somente se a pipeline anterior tiver sido concluída com sucesso        # passos do job
         steps:
             # clone do projeto
             - uses: actions/checkout@v4
