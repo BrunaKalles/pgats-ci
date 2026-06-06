@@ -53,6 +53,9 @@ jobs:
 
       - name: Instalando o Yarn
         run: npm install -g yarn
+      
+      - name: Instalando as dependências
+        run: yarn install
 
       - name: Rodando testes unitários
         run: yarn run test
