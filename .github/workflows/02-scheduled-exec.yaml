@@ -14,6 +14,10 @@ on:
     - cron: '*/30 * * *' # todos os dias, a cada 30 minutos
     #- cron: '0 0 * * 5' # toda sexta-feira, à meia-noite
 
+  push:
+    branches:
+      - master
+
 # tarefas dentro da pipeline = jobs
 jobs:
   # nome do job
@@ -53,15 +57,9 @@ jobs:
       - name: Executando os testes e2e
         run: yarn run e2e
 
-      #- name: Mostrar results.xml
-      #  if: always()
-      #  run: |
-      #    cat results.xml | head -20
-
-      #  - name: Fazer upload do relatório do Playwright
-      #    uses: actions/upload-artifact@v4
-      #    if: always()
-      #     with:
-      #      name: playwright-report
-      #      path: playwright-report/
-      #      retention-days: 30
+      - name: Salvando relatório de testes
+        uses: actions/upload-artifact@v4
+        if: ${{always()}}
+        with:
+          path: ./playwright-report
+          name: playwright-report
