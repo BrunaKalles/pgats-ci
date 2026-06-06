@@ -12,6 +12,7 @@ on:
         #crononograma de execução
         # 1º - minuto, 2º - hora,  3º - dia do mês, 4º - mês, 5º - dia da semana
       - cron: '*/30 * * *' # todos os dias, a cada 30 minutos
+      #- cron: '0 0 * * 5' # toda sexta-feira, à meia-noite 
 
 
 # tarefas dentro da pipeline = jobs
