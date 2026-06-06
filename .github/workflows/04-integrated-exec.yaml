@@ -1,0 +1,101 @@
+# CI de Nível 04 - DPipeline integrada a um processo de deploy / build do código
+# nome da pipeline
+name: 'Execução Integrada'
+
+# gatilhos / triggers - regras de disparo
+# gatilho manual= workflow dispatch
+# gatilho por cronograma = schedule
+# gatilho por conclusão de outra pipeline = workflow run
+
+
+on:
+    workflow_dispatch:
+
+# tarefas dentro da pipeline = jobs
+jobs: 
+    # nome do job
+    inspecao:
+        # maquina onde o job vai rodar
+        runs-on: ubuntu-latest
+    
+        # passos do job
+        steps:
+            # clone do projeto
+            - uses: actions/checkout@v4
+
+            - name: Verificar máquina
+              run: hostname
+            # instalação do node
+            -   uses: actions/setup-node@v4
+                with:
+                    node-version: latest 
+
+            # instalação do yarn
+            - name: Instalando o Yarn
+              run: npm install -g yarn
+
+            # instalação das dependências
+            - name: Instalando as dependências
+              run: yarn #install
+
+            - name:  Inspeção de Código
+              run: yarn lint
+
+    unidade:
+        runs-on: ubuntu-latest
+        needs: [inspecao] # dependência do job de inspeção de código
+
+        steps:
+          - uses: actions/checkout@v4
+
+          - uses: actions/setup-node@v4
+            with:
+              node-version: latest
+        
+          - name: Instalando o Yarn
+            run: npm install -g yarn
+
+          - name: Rodando testes unitários
+            run: yarn run test
+            
+    e2e-tests:
+        runs-on: ubuntu-latest
+        needs: [inspecao] # dependência do job de inspeção de código
+        
+        steps:
+          - uses: actions/checkout@v4
+
+          - uses: actions/setup-node@v4
+            with:
+              node-version: latest
+          
+          - name: Instalando o Yarn
+            run: npm install -g yarn
+
+          - name: Instalando as dependências
+            run: yarn install
+
+          # instalação dos browsers do playwright
+          - name: Instalando os browsers do Playwright
+            run: yarn playwright install
+
+          # execução dos testes e2e
+          - name: Executando os testes e2e
+            run: yarn run e2e  
+    deploy:
+      runs-on: ubuntu-latest
+      needs: [unidade, e2e-tests] # dependência dos jobs de testes
+
+      steps:
+        - name: Simualação de Deploy
+          run: echo "Deploy sendo realizado..."
+
+         # - name: Fazer upload do relatório do Playwright
+         #   uses: actions/upload-artifact@v4
+         #   if: always()
+         #   with:
+         #    name: playwright-report
+         #    path: playwright-report/
+         #    retention-days: 30
+
+      

@@ -1,4 +1,4 @@
-# CI de Nível 01 - Disparo após a conclusão de outra pipeline.
+# CI de Nível 03 - Disparo após a conclusão de outra pipeline.
 
 # nome da pipeline
 name: 'Execução por deploy'
